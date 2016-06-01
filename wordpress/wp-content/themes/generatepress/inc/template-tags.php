@@ -154,10 +154,7 @@ function generate_comment( $comment, $args, $depth ) {
 			<div class="comment-content">
 				<?php comment_text(); ?>
 			</div><!-- .comment-content -->
-
-			
 		</article><!-- .comment-body -->
-
 	<?php
 	endif;
 }
@@ -167,11 +164,8 @@ if ( ! function_exists( 'generate_posted_on' ) ) :
 /**
  * Prints HTML with meta information for the current post-date/time and author.
  */
-function generate_posted_on() {
-
-	if ( 'post' !== get_post_type() ) 
-		return;
-	
+function generate_posted_on() 
+{	
 	$date = apply_filters( 'generate_post_date', true );
 	$author = apply_filters( 'generate_post_author', true );
 		
@@ -209,6 +203,42 @@ function generate_posted_on() {
 		);
 	endif;
 	
+}
+endif;
+
+if ( ! function_exists( 'generate_entry_meta' ) ) :
+/**
+ * Prints HTML with meta information for the categories, tags.
+ *
+ * @since 1.2.5
+ */
+function generate_entry_meta() 
+{
+	$categories = apply_filters( 'generate_show_categories', true );
+	$tags = apply_filters( 'generate_show_tags', true );
+	$comments = apply_filters( 'generate_show_comments', true );
+
+	$categories_list = get_the_category_list( _x( ', ', 'Used between list items, there is a space after the comma.', 'generatepress' ) );
+	if ( $categories_list && $categories ) {
+		printf( '<span class="cat-links"><span class="screen-reader-text">%1$s </span>%2$s</span>',
+			_x( 'Categories', 'Used before category names.', 'generatepress' ),
+			$categories_list
+		);
+	}
+
+	$tags_list = get_the_tag_list( '', _x( ', ', 'Used between list items, there is a space after the comma.', 'generatepress' ) );
+	if ( $tags_list && $tags ) {
+		printf( '<span class="tags-links"><span class="screen-reader-text">%1$s </span>%2$s</span>',
+			_x( 'Tags', 'Used before tag names.', 'generatepress' ),
+			$tags_list
+		);
+	}
+
+	if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) && $comments ) {
+		echo '<span class="comments-link">';
+		comments_popup_link( __( 'Leave a comment', 'generatepress' ), __( '1 Comment', 'generatepress' ), __( '% Comments', 'generatepress' ) );
+		echo '</span>';
+	}
 }
 endif;
 
@@ -396,45 +426,6 @@ function generate_mobile_menu_search_icon()
 		</span>
 	</div><!-- .mobile-bar-items -->
 	<?php
-}
-endif;
-
-if ( ! function_exists( 'generate_entry_meta' ) ) :
-/**
- * Prints HTML with meta information for the categories, tags.
- *
- * @since 1.2.5
- */
-function generate_entry_meta() 
-{
-	$categories = apply_filters( 'generate_show_categories', true );
-	$tags = apply_filters( 'generate_show_tags', true );
-	$comments = apply_filters( 'generate_show_comments', true );
-	
-	if ( 'post' == get_post_type() ) {
-
-		$categories_list = get_the_category_list( _x( ', ', 'Used between list items, there is a space after the comma.', 'generatepress' ) );
-		if ( $categories_list && $categories ) {
-			printf( '<span class="cat-links"><span class="screen-reader-text">%1$s </span>%2$s</span>',
-				_x( 'Categories', 'Used before category names.', 'generatepress' ),
-				$categories_list
-			);
-		}
-
-		$tags_list = get_the_tag_list( '', _x( ', ', 'Used between list items, there is a space after the comma.', 'generatepress' ) );
-		if ( $tags_list && $tags ) {
-			printf( '<span class="tags-links"><span class="screen-reader-text">%1$s </span>%2$s</span>',
-				_x( 'Tags', 'Used before tag names.', 'generatepress' ),
-				$tags_list
-			);
-		}
-	}
-
-	if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) && $comments ) {
-		echo '<span class="comments-link">';
-		comments_popup_link( __( 'Leave a comment', 'generatepress' ), __( '1 Comment', 'generatepress' ), __( '% Comments', 'generatepress' ) );
-		echo '</span>';
-	}
 }
 endif;
 
@@ -738,6 +729,24 @@ function generate_post_meta()
 		<div class="entry-meta">
 			<?php generate_posted_on(); ?>
 		</div><!-- .entry-meta -->
+	<?php endif;
+}
+endif;
+
+if ( ! function_exists( 'generate_footer_meta' ) ) :
+/**
+ * Build the footer post meta
+ *
+ * @since 1.3.30
+ */
+add_action( 'generate_after_entry_content', 'generate_footer_meta' );
+function generate_footer_meta()
+{
+	if ( 'post' == get_post_type() ) : ?>
+		<footer class="entry-meta">
+			<?php generate_entry_meta(); ?>
+			<?php if ( is_single() ) generate_content_nav( 'nav-below' ); ?>
+		</footer><!-- .entry-meta -->
 	<?php endif;
 }
 endif;

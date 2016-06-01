@@ -1518,6 +1518,10 @@ footer.entry-meta .byline {
 	margin-top: 0;
 }
 
+.inside-article .page-header-image-single.page-header-below-title {
+	margin-top: 2em;
+}
+
 /* WooCommerce */
 .woocommerce .page-header-image-single {
 	display: none;
@@ -1571,7 +1575,7 @@ div.bbp-topic-tags {
 	max-width: 100%;
 }
 
-.fl-builder.one-container .site-content {
+.fl-builder.one-container.no-sidebar .site-content {
 	padding:0;
 }
 

@@ -212,7 +212,9 @@
 	}
 	
 	.woocommerce ul.products li.product, 
-	.woocommerce-page ul.products li.product {
+	.woocommerce-page ul.products li.product, 
+	.woocommerce-page[class*=columns-] ul.products li.product,
+	.woocommerce[class*=columns-] ul.products li.product {
 		width: 100%;
 		float: none;
 	}

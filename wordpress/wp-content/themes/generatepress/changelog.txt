@@ -1,5 +1,22 @@
 === changelog ===
 
+= (5/29/2016) - 1.3.31 =
+* Fix issue where images are enlarging in content if Photon is activated
+
+= (5/28/2016) - 1.3.30 =
+* Add before and entry title hooks to content-link.php
+* Remove check for post post type in generate_posted_on()
+* Remove check for post post type in generate_entry_meta()
+* Adjust label size in Typography sections in Customizer for longer translations
+* Add comment-logout class to the comment log out link
+* Add a filter to set the responsive image size to the width of the container
+* Make sure WooCommerce products are full width on mobile
+* Fix bug where "0" value for footer widgets wasn't working
+* Update Font Awesome to 4.6.3
+* Adjust some Beaver Builder styling
+* Add the footer entry meta into a function which we can hook into different actions
+* When dropdown click - arrow is set, clicking entire menu item if URL is # will drop down submenu
+
 = (4/30/2016) - 1.3.29 =
 * Adjust metaboxes to not save empty postmeta
 * Only make container full width with Beaver Builder when no sidebars is set

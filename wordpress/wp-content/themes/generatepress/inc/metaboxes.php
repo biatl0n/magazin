@@ -187,7 +187,7 @@ function generate_save_footer_widget_meta($post_id) {
 	$key   = '_generate-footer-widget-meta';
 	$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
 
-	if ( $value )
+	if ( '' !== $value )
 		update_post_meta( $post_id, $key, $value );
 	else
 		delete_post_meta( $post_id, $key );

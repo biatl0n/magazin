@@ -26,12 +26,8 @@
 			) );
 			?>
 		</div><!-- .entry-content -->
-		<?php do_action( 'generate_after_entry_content'); ?>
-
-		<footer class="entry-meta">
-			<?php generate_entry_meta(); ?>
-			<?php generate_content_nav( 'nav-below' ); ?>
-		</footer><!-- .entry-meta -->
-		<?php do_action( 'generate_after_content'); ?>
+		
+		<?php do_action( 'generate_after_entry_content' ); ?>
+		<?php do_action( 'generate_after_content' ); ?>
 	</div><!-- .inside-article -->
 </article><!-- #post-## -->

@@ -5,7 +5,7 @@
  * @package GeneratePress
  */
 	
-define( 'GENERATE_VERSION', '1.3.29');
+define( 'GENERATE_VERSION', '1.3.31');
 define( 'GENERATE_URI', get_template_directory_uri() );
 define( 'GENERATE_DIR', get_template_directory() );
 
@@ -239,7 +239,7 @@ function generate_scripts()
 	// Font Awesome
 	$icon_essentials = apply_filters( 'generate_fontawesome_essentials', false );
 	$icon_essentials = ( $icon_essentials ) ? '-essentials' : false;
-	wp_enqueue_style( "fontawesome{$icon_essentials}", get_template_directory_uri() . "/css/font-awesome{$icon_essentials}{$suffix}.css", false, '4.6.1', 'all' );
+	wp_enqueue_style( "fontawesome{$icon_essentials}", get_template_directory_uri() . "/css/font-awesome{$icon_essentials}{$suffix}.css", false, '4.6.3', 'all' );
 	
 	// Add jQuery
 	wp_enqueue_script( 'jquery' );

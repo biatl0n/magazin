@@ -814,7 +814,15 @@ function generate_customize_preview_css() {
 		}
 		
 		span.value {
+			display: inline-block;
 			float: right;
+			width: 30%;
+			text-align: right;
+		}
+		
+		span.typography-size-label {
+			display: inline-block;
+			width: 70%;
 		}
 		
 		div.slider {
