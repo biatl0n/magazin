@@ -244,6 +244,8 @@ class WC_Widget_Product_Categories extends WC_Widget {
 			echo '</ul>';
         }
 
+        echo "Hello!!!!!!!!!!!!";
+
 		$this->widget_end( $args );
 	}
 }
