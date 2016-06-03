@@ -1,0 +1,46 @@
+/*
+ Theme Name: storefront Child Theme
+ Template: storefront
+ */
+
+@import url("../storefront/style.css");
+
+.main-navigation li li {
+    float: none;
+    border: 1px solid white;
+}
+
+.main-navigation ul ul {
+    width: 900px;
+}
+
+.sub-menu {
+    position: absolute;
+    top:0px!important;
+    left:0px!important;
+}
+
+.site-branding {
+    font-size: 0.5em;
+}
+
+.col-full {
+    max-width: 100%;
+}
+
+.site-search {
+    float: left!important;
+    width: 40%!important;
+}
+
+.site-branding {
+    width: auto!important;
+}
+
+.main-navigation {
+    width: 100%!important;
+}
+
+.secondary-navigation {
+    width: 1px!important;
+}

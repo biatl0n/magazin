@@ -1,0 +1,5 @@
+<?php
+add_action( 'init', 'remove_search' );
+function remove_search() {
+remove_action( 'storefront_header', 'storefront_product_search', 40 );
+}
