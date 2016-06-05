@@ -1,0 +1,8 @@
+<?php
+/*add_action( 'init', 'remove_widgets' );
+function remove_widgets() {
+    remove_action( 'storefront_header', 'storefront_product_search', 40 );
+}*/
+
+add_theme_support('menus');
+wp_nav_menu('menu=horizont');

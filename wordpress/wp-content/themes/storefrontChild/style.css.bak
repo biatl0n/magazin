@@ -1,0 +1,86 @@
+/*
+ Theme Name: storefront Child Theme
+ Template: storefront
+ */
+
+@import url("../storefront/style.css");
+
+
+#navigation {
+    float: left;
+    width: 100%;
+    background: #A11C46;
+    border-top: 1px solid #FFFFFF;
+    border-bottom: 5px solid #FFFFFF;
+}
+
+ul.dropdown {
+    list-style: none;
+    float: left;
+    width: 100%;
+    padding: 0px 5px;
+}
+
+ul.dropdown li {
+    float: left;
+    position: relative;
+}
+
+ul.dropdown a{
+    padding: 12px;
+    color: #FFFFFF;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 #000000;
+}
+
+ul.dropdown li:hover a {
+    background: #666666;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 0 #000000;
+}
+
+ul.dropdown li ul a{
+    display: block;
+}
+
+ul.dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    position: absolute;
+}
+
+ul.dropdown li ul {
+    top 24px;
+}
+
+ul.dropdown ul ul {
+    top: 0px;
+    left: 100%;
+}
+
+ul.dropdown ul li {
+    float: none;
+}
+
+ul.dropdown ul, ul.dropdown li:hover ul ul, ul.dropdown ul li:hover ul ul {
+    display: none;
+}
+
+ul.dropdown li:hover ul, ul.dropdown ul li:hover ul, ul.dropdown ul li ul li:hover ul {
+    display: block;
+}
+
+ul.dropdown li * a:hover {
+    background: #A11C46;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 0 #000000;
+}
+
+
+
+
+
+
+

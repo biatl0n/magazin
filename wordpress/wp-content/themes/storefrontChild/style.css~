@@ -5,42 +5,82 @@
 
 @import url("../storefront/style.css");
 
-.main-navigation li li {
-    float: none;
-    border: 1px solid white;
-}
-
-.main-navigation ul ul {
-    width: 900px;
-}
-
-.sub-menu {
-    position: absolute;
-    top:0px!important;
-    left:0px!important;
-}
-
-.site-branding {
-    font-size: 0.5em;
-}
-
 .col-full {
+    margin: 0;
     max-width: 100%;
-}
-
-.site-search {
-    float: left!important;
-    width: 40%!important;
-}
-
-.site-branding {
-    width: auto!important;
-}
-
-.main-navigation {
     width: 100%!important;
 }
 
-.secondary-navigation {
-    width: 1px!important;
+.site-branding, .site-search {
+    height: 30px;
 }
+
+#navigation {
+    float: left;
+    width: 100%;
+    background: #FFFFFF;
+    text-align: center;
+}
+
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown ul {
+    height: 100px;
+    list-style: none;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.dropdown li {
+    display: inline-block;
+}
+
+ul.dropdown ul {
+    width: 100%;
+    position: absolute;
+    left: -9999px;
+}
+
+.dropdown a {
+    color: #000000;
+    /*display: block;*/
+    padding: 0.25em 1em;
+}
+
+ul.dropdown {
+    margin: 0;
+}
+
+ul.dropdown li ul {
+    margin: 0;
+}
+
+ul.dropdown a:hover {
+    color: #FF0000;
+}
+
+ul.dropdown li li a {
+    float: left;
+    color: #000;
+    width: 100px;
+    height: 100px;
+}
+
+ul.dropdown li li:hover {
+    background: #FFEEAA;
+}
+
+ul.dropdown li:hover a {
+   /* background-color: #FF0000;*/
+}
+
+ul.dropdown li:hover ul {
+    left: 0px;
+    width: 100%;
+    background: #FFDD55;
+}
+
+
