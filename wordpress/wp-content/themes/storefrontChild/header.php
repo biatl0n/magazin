@@ -23,8 +23,14 @@
 	<?php
 	do_action( 'storefront_before_header' ); ?>
 
-	<header id="masthead" class="site-header" role="banner" style="<?php storefront_header_styles(); ?>">
-        <div class="col-full">
+    <header id="masthead" class="site-header" role="banner" style="<?php storefront_header_styles(); ?>">
+                <div class="col-full">
+                <div class="top-top">
+                    <div class="consult">Консультация, доставка, оплата </div>
+                    <div class="phone">Тел. 8-800-800-80-00</div>
+                    <div class="call-back">Обратный звонок</div>
+                </div>
+
 			<?php
 			/**
 			 * Functions hooked into storefront_header action

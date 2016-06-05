@@ -5,14 +5,76 @@
 
 @import url("../storefront/style.css");
 
-.col-full {
-    margin: 0;
-    max-width: 100%;
-    width: 100%!important;
+.cart-contents {
+    padding-top: 10px!important;
+    padding-bottom: 10px!important;
 }
 
-.site-branding, .site-search {
-    height: 30px;
+.site-search {
+    float: left!important;
+    margin-bottom: 0!important;
+    width: 40%!important;
+}
+
+.search-field {
+    padding-top: 10px!important;
+    padding-bottom: 10px!important;
+}
+
+.top-top {
+    width: 100%;
+    height: 35px;
+    background: #000000;
+}
+
+.consult, .phone, .call-back {
+    text-align: center;
+    width: 33%;
+    float: left;
+    color: #FFFFFF;
+    padding-left: 10px;
+    font-size: 1em;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.call-back {
+    width: 33%;
+    float: left;
+}
+
+.phone {
+    width: 34%;
+    float: left;
+}
+
+.col-full {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    width: 100%!important;
+    background: #FFF;
+}
+
+.site-branding {
+    margin-right: 0!important;
+    margin-bottom: 0!important;
+    padding-left: 5%;
+    width: 35%!important;
+}
+
+.site-header {
+    padding-top: 0px;
+}
+
+.site-title {
+    width: 300px;
+}
+
+.site-title a {
+    font-size: 0.8em;
+    font-weight: 200!important;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #navigation {
@@ -20,6 +82,8 @@
     width: 100%;
     background: #FFFFFF;
     text-align: center;
+    border-top: 1px solid #888;
+    border-bottom: 1px solid #888;
 }
 
 .dropdown {
@@ -32,6 +96,7 @@
     list-style: none;
     width: 100%;
     margin: 0 auto;
+    overflow: hidden;
 }
 
 .dropdown li {
@@ -41,13 +106,29 @@
 ul.dropdown ul {
     width: 100%;
     position: absolute;
+    border-bottom: 1px solid #222;
+    border-top: 1px solid #222;
     left: -9999px;
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .dropdown a {
     color: #000000;
     /*display: block;*/
     padding: 0.25em 1em;
+
+}
+
+ul.dropdown li a {
+    font-size: 0.9em;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul.dropdown li li a {
+    font-size: 0.8em;
 }
 
 ul.dropdown {
@@ -58,29 +139,29 @@ ul.dropdown li ul {
     margin: 0;
 }
 
-ul.dropdown a:hover {
-    color: #FF0000;
-}
-
 ul.dropdown li li a {
     float: left;
     color: #000;
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 98px;
 }
 
-ul.dropdown li li:hover {
-    background: #FFEEAA;
+ul.dropdown li li {
+    text-align: center;
 }
 
-ul.dropdown li:hover a {
-   /* background-color: #FF0000;*/
-}
+/*ul.dropdown li li:hover {
+    background: #FFEEAA; 
+} */
 
 ul.dropdown li:hover ul {
     left: 0px;
     width: 100%;
-    background: #FFDD55;
+    /*background: #FFDD55;*/
+    background: #C8C5D9;
 }
 
-
+.menu-item:hover {
+    /*background: #FFEEAA;*/
+    background: #CEDECE;
+}
