@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+    <head>
+        <meta charset="UTF-8">
+        <link rel='stylesheet' type='text/css' href='style.css' />
+    </head>
+    <body>
+
+    <div class="lay">
+    <div class="pops__wrapp">
+        <div class="pops__row pops__row_pos_1">
+            <a class="pops__item" href="#">
+                <img class="image" src="woter.png" title=""></img>
+            </a>
+            <a class="pops__item" href="#">
+                <img class="image" src="pump.png" title=""></img>
+            </a>
+            <a class="pops__item" href="#">
+                <img class="image" src="tv.png" title=""></img>
+            </a>
+        </div>
+    </div>
+    </div>
+
+
+    </body>
+</html>

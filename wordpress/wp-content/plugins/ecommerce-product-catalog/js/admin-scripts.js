@@ -14,6 +14,7 @@ jQuery( document ).ready( function () {
     };
 
     jQuery( '.sort-settings tbody' ).sortable( {
+        items: "tr:not(.ic-not-sortable)",
         update: function () {
             jQuery( '.sort-settings tbody tr' ).each( function () {
                 var r = jQuery( this ).index();

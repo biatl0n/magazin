@@ -37,14 +37,8 @@ function compatibility_product_short_description( $product_desc, $product_id ) {
 			}
 			return $old_desc;
 		} else {
-			$post = get_post( $product_id );
-			if ( !empty( $post->post_excerpt ) ) {
-				$excerpt = $post->post_excerpt;
-				if ( current_user_can( 'edit_products' ) ) {
-					update_post_meta( $product_id, 'excerpt', $excerpt );
-				}
-				return $excerpt;
-			}
+			$excerpt = get_post_meta( $product_id, 'excerpt', true );
+			return $excerpt;
 		}
 	}
 	return $product_desc;
@@ -60,14 +54,8 @@ function compatibility_product_description( $product_desc, $product_id ) {
 			}
 			return $old_desc;
 		} else {
-			$post = get_post( $product_id );
-			if ( !empty( $post->post_content ) ) {
-				$content = $post->post_content;
-				if ( current_user_can( 'edit_products' ) ) {
-					update_post_meta( $product_id, 'content', $content );
-				}
-				return $content;
-			}
+			$content = get_post_meta( $product_id, 'content', true );
+			return $content;
 		}
 	}
 	return $product_desc;

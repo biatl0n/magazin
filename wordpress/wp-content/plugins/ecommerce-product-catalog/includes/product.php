@@ -262,7 +262,7 @@ function al_product_attributes() {
 	<th class="dragger"></th>
 	</tr>
 	</thead>
-	<tbody><tr style="height: 6px;"></tr>';
+	<tbody><tr style="height: 6px;" class="ic-not-sortable"></tr>';
 	do_action( 'inside_attributes_edit_table' );
 	$attributes_option		 = get_option( 'product_attribute' );
 	$attributes_label_option = get_option( 'product_attribute_label' );
@@ -274,9 +274,9 @@ function al_product_attributes() {
 		$label_autocomplete = 'data-ic-autocomplete="' . esc_attr( json_encode( $available_labels ) ) . '"';
 	}
 	for ( $i = 1; $i <= $attributes_number; $i++ ) {
-		$attributes_option_field		 = get_post_meta( $post->ID, '_attribute' . $i, true );
-		$attributes_label_option_field	 = get_post_meta( $post->ID, '_attribute-label' . $i, true );
-		$attributes_unit_option_field	 = get_post_meta( $post->ID, '_attribute-unit' . $i, true );
+		$attributes_option_field		 = get_attribute_value( $i, $post->ID ); //get_post_meta( $post->ID, '_attribute' . $i, true );
+		$attributes_label_option_field	 = get_attribute_label( $i, $post->ID ); //get_post_meta( $post->ID, '_attribute-label' . $i, true );
+		$attributes_unit_option_field	 = get_attribute_unit( $i, $post->ID ); //get_post_meta( $post->ID, '_attribute-unit' . $i, true );
 		$attributes_option[ $i ]		 = isset( $attributes_option[ $i ] ) ? $attributes_option[ $i ] : '';
 		$attributes_label_option[ $i ]	 = isset( $attributes_label_option[ $i ] ) ? $attributes_label_option[ $i ] : '';
 		$attributes_unit_option[ $i ]	 = isset( $attributes_unit_option[ $i ] ) ? $attributes_unit_option[ $i ] : '';
@@ -286,21 +286,22 @@ function al_product_attributes() {
 		$attributes_label_option_field	 = !empty( $attributes_label_option_field ) ? $attributes_label_option_field : $attributes_label_option[ $i ];
 		$attributes_unit_option_field	 = !empty( $attributes_unit_option_field ) ? $attributes_unit_option_field : $attributes_unit_option[ $i ];
 		$attribute_value_field			 = '';
-		if ( !is_array( $attributes_option_field ) ) {
-			$autocomplete = '';
-			if ( !empty( $attributes_label_option_field ) ) {
-				$available_attribute_values = ic_get_attribute_values( $attributes_label_option_field );
-				if ( $available_attribute_values ) {
-					$autocomplete = 'data-ic-autocomplete="' . esc_attr( json_encode( $available_attribute_values ) ) . '"';
-				}
-			}
-			$attribute_value_field = '<input ' . $autocomplete . ' class="ic_autocomplete attribute-value" type="text" name="_attribute' . $i . '" value="' . esc_html( $attributes_option_field ) . '" />';
+		if ( is_array( $attributes_option_field ) ) {
+			$attributes_option_field = '';
 		}
+		$autocomplete = '';
+		if ( !empty( $attributes_label_option_field ) ) {
+			$available_attribute_values = ic_get_attribute_values( $attributes_label_option_field );
+			if ( $available_attribute_values ) {
+				$autocomplete = 'data-ic-autocomplete="' . esc_attr( json_encode( $available_attribute_values ) ) . '"';
+			}
+		}
+		$attribute_value_field = '<input ' . $autocomplete . ' class="ic_autocomplete attribute-value" type="text" name="_attribute' . $i . '" value="' . esc_html( $attributes_option_field ) . '" />';
 		?>
 		<tr>
 			<td class="attributes-label-column"><input <?php echo $label_autocomplete ?> class="ic_autocomplete attribute-label" type="text" name="_attribute-label<?php echo $i ?>" value="<?php echo esc_html( $attributes_label_option_field ) ?>"/></td>
 			<td class="break-column">:</td>
-			<td class="value-column"><?php echo apply_filters( 'product_attribute_value_edit', $attribute_value_field, $i, $attributes_option_field ) ?></td>
+			<td class="value-column"><?php echo apply_filters( 'product_attribute_value_edit', $attribute_value_field, $i, $attributes_option_field, $attributes_label_option_field ) ?></td>
 			<td class="unit-column"><input class="attribute-unit admin-number-field" type="text"
 										   name="_attribute-unit<?php echo $i ?>"
 										   value="<?php echo esc_html( $attributes_unit_option_field ) ?>"/></td>
@@ -368,9 +369,9 @@ function implecode_save_products_meta( $post_id, $post ) {
 		}
 		$max_attributes = product_attributes_number();
 		for ( $i = 1; $i <= $max_attributes; $i++ ) {
-			$product_meta[ '_attribute' . $i ]		 = !empty( $_POST[ '_attribute' . $i ] ) ? apply_filters( 'save_product_attribute_value', $_POST[ '_attribute' . $i ], $i, $post->ID ) : '';
 			$product_meta[ '_attribute-label' . $i ] = !empty( $_POST[ '_attribute-label' . $i ] ) ? apply_filters( 'save_product_attribute_label', $_POST[ '_attribute-label' . $i ], $i, $post->ID ) : '';
-			$product_meta[ '_attribute-unit' . $i ]	 = !empty( $_POST[ '_attribute-unit' . $i ] ) ? apply_filters( 'save_product_attribute_unit', $_POST[ '_attribute-unit' . $i ], $i, $post->ID ) : '';
+			$product_meta[ '_attribute' . $i ]		 = !empty( $_POST[ '_attribute' . $i ] ) ? apply_filters( 'save_product_attribute_value', $_POST[ '_attribute' . $i ], $i, $post->ID, $product_meta[ '_attribute-label' . $i ] ) : '';
+			$product_meta[ '_attribute-unit' . $i ]	 = !empty( $_POST[ '_attribute-unit' . $i ] ) ? apply_filters( 'save_product_attribute_unit', $_POST[ '_attribute-unit' . $i ], $i, $post->ID, $product_meta[ '_attribute-label' . $i ] ) : '';
 		}
 		$product_meta = apply_filters( 'product_meta_save', $product_meta, $post );
 		foreach ( $product_meta as $key => $value ) {
@@ -486,8 +487,12 @@ add_filter( 'post_updated_messages', 'set_product_messages' );
  * @param int $product_id
  * @return string
  */
-function get_product_description( $product_id ) {
-	$product_desc = get_post_meta( $product_id, 'content', true );
+function get_product_description( $product_id, $post = null ) {
+	//$product_desc = get_post_meta( $product_id, 'content', true );
+	if ( empty( $post ) ) {
+		$post = get_post( $product_id );
+	}
+	$product_desc = $post->post_content;
 	return apply_filters( 'get_product_description', $product_desc, $product_id );
 }
 
@@ -497,8 +502,12 @@ function get_product_description( $product_id ) {
  * @param int $product_id
  * @return string
  */
-function get_product_short_description( $product_id ) {
-	$product_desc = get_post_meta( $product_id, 'excerpt', true );
+function get_product_short_description( $product_id, $post = null ) {
+	//$product_desc = get_post_meta( $product_id, 'excerpt', true );
+	if ( empty( $post ) ) {
+		$post = get_post( $product_id );
+	}
+	$product_desc = $post->post_excerpt;
 	return apply_filters( 'get_product_short_description', $product_desc, $product_id );
 }
 

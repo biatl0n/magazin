@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the GeneratePress package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2016-05-03 06:01:44+0000\n"
+"PO-Revision-Date: 2016-06-14 05:22:55+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,6 +20,10 @@ msgstr ""
 msgid "GeneratePress"
 msgstr "GeneratePress"
 
+#: comments.php:85
+msgid "Logged in as <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" class=\"comment-logout\" title=\"Log out of this account\">Log out?</a>"
+msgstr "Вошли как <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" class=\"comment-logout\" title=\"Log out of this account\">Выйти?</a>"
+
 #: inc/customizer.php:409
 msgid "Hover"
 msgstr "При наведении"
@@ -36,7 +40,7 @@ msgstr "Кликнуть на стрелку"
 msgid "Back to Top Button"
 msgstr "Кнопка «Вверх»"
 
-#: inc/template-tags.php:642
+#: inc/template-tags.php:633
 msgid "Scroll back to top"
 msgstr "Прокрутка вверх"
 
@@ -131,47 +135,47 @@ msgstr "Готовы опубликовать свою первую запись
 msgid "Nothing Found"
 msgstr "Ничего не найдено"
 
-#: inc/template-tags.php:435
+#: inc/template-tags.php:239
 msgid "% Comments"
 msgstr "Комментарии (%)"
 
-#: inc/template-tags.php:435
+#: inc/template-tags.php:239
 msgid "1 Comment"
 msgstr "1 комментарий"
 
-#: inc/template-tags.php:435
+#: inc/template-tags.php:239
 msgid "Leave a comment"
 msgstr "Оставить комментарий"
 
-#: inc/template-tags.php:427
+#: inc/template-tags.php:232
 msgctxt "Used before tag names."
 msgid "Tags"
 msgstr "Метки"
 
-#: inc/template-tags.php:419
+#: inc/template-tags.php:224
 msgctxt "Used before category names."
 msgid "Categories"
 msgstr "Рубрики"
 
-#: inc/template-tags.php:416 inc/template-tags.php:424
+#: inc/template-tags.php:221 inc/template-tags.php:229
 msgctxt "Used between list items, there is a space after the comma."
 msgid ", "
 msgstr ", "
 
-#: inc/template-tags.php:339
+#: inc/template-tags.php:369
 msgctxt "label"
 msgid "Search"
 msgstr "Поиск"
 
-#: inc/template-tags.php:221 inc/template-tags.php:232
+#: inc/template-tags.php:251 inc/template-tags.php:262
 msgid "Read more"
 msgstr "Читать далее"
 
-#: inc/template-tags.php:206
+#: inc/template-tags.php:200
 msgid "View all posts by %s"
 msgstr "Посмотреть все записи автора %s"
 
-#: inc/template-tags.php:204
+#: inc/template-tags.php:198
 msgid "by"
 msgstr "Автор:"
 
@@ -268,7 +272,7 @@ msgstr "Попробуйте наше дополнение \"Импорт/Экс
 msgid "Customize"
 msgstr "Настроить"
 
-#: inc/navigation.php:136 inc/template-tags.php:365 inc/template-tags.php:394
+#: inc/navigation.php:136 inc/template-tags.php:395 inc/template-tags.php:424
 #: searchform.php:13
 msgctxt "submit button"
 msgid "Search"
@@ -336,7 +340,7 @@ msgstr "Боковая панель"
 msgid "Content"
 msgstr "Текст"
 
-#: inc/customizer.php:848
+#: inc/customizer.php:856
 msgid "Add-ons Available! Take a look"
 msgstr "Есть дополнения! Посмотреть"
 
@@ -649,7 +653,7 @@ msgstr "Виджет 5 — Футер"
 msgid "Edit"
 msgstr "Изменить"
 
-#: content-link.php:29 content-page.php:24 content-single.php:24 content.php:25
+#: content-link.php:26 content-page.php:24 content-single.php:24 content.php:25
 msgid "Pages:"
 msgstr "Страниц:"
 
@@ -672,10 +676,6 @@ msgstr "Оставить комментарий"
 #: comments.php:84
 msgid "You must be <a href=\"%1$s\">logged in</a> to post a comment."
 msgstr "Вы должны быть <a href=\"%1$s\">авторизованы</a> для комментирования."
-
-#: comments.php:85
-msgid "Logged in as <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" title=\"Log out of this account\">Log out?</a>"
-msgstr "Вы вошли как <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" title=\"Выйти из этой учётной записи\">Выйти?</a>"
 
 #: comments.php:79
 msgid "Website"
@@ -713,39 +713,39 @@ msgstr[0] "%2$s: %1$s комментарий"
 msgstr[1] "%2$s: %1$s комментария"
 msgstr[2] "%2$s: %1$s комментариев"
 
-#: inc/template-tags.php:705 sidebar-left.php:39 sidebar.php:38
+#: inc/template-tags.php:696 sidebar-left.php:39 sidebar.php:38
 msgid "Archives"
 msgstr "Архивы"
 
-#: inc/template-tags.php:702
+#: inc/template-tags.php:693
 msgid "Links"
 msgstr "Ссылки"
 
-#: inc/template-tags.php:699
+#: inc/template-tags.php:690
 msgid "Quotes"
 msgstr "Цитаты"
 
-#: inc/template-tags.php:696
+#: inc/template-tags.php:687
 msgid "Videos"
 msgstr "Видео"
 
-#: inc/template-tags.php:693
+#: inc/template-tags.php:684
 msgid "Images"
 msgstr "Изображения"
 
-#: inc/template-tags.php:690
+#: inc/template-tags.php:681
 msgid "Asides"
 msgstr "Заметки"
 
-#: inc/template-tags.php:687
+#: inc/template-tags.php:678
 msgid "Year: %s"
 msgstr "Год: %s"
 
-#: inc/template-tags.php:684
+#: inc/template-tags.php:675
 msgid "Month: %s"
 msgstr "Месяц: %s"
 
-#: inc/template-tags.php:681
+#: inc/template-tags.php:672
 msgid "Day: %s"
 msgstr "День: %s"
 

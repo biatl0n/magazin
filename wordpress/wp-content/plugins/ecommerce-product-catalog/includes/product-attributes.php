@@ -250,6 +250,9 @@ function ic_get_attribute_values( $label ) {
  */
 function ic_sanitize_product_attribute( $attribute ) {
 	$sanitized_attribute = wp_unslash( sanitize_term_field( 'name', $attribute, 0, 'al_product-attributes', 'db' ) );
+	if ( strlen( $sanitized_attribute ) > 200 ) {
+		return '';
+	}
 	return $sanitized_attribute;
 }
 

@@ -646,6 +646,7 @@ article#product_listing {
 .list .product-short-descr {
     clear: none;
     padding-left: 26.5%;
+    font-size: 0.9em;
 }
 
 .list .product-short-descr p {
@@ -1965,6 +1966,18 @@ table.ic-block td:first-child, .boxed #product_features table td:first-child {
 
 /* Responsive */
 @media (max-width: 1000px) {
+    body #container.product-catalog {
+        width: 100%;
+        padding: 0;
+    }
+    body #container.product-catalog {
+        padding: 5px;
+    }
+    body .content-area.product-catalog #content {
+        width: 100%;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
     /* IC Accordion */
     .boxed.responsive .after-product-details {
         border: 0;
@@ -2018,13 +2031,6 @@ table.ic-block td:first-child, .boxed #product_features table td:first-child {
     }
 }
 @media (max-width: 700px) {
-    body #container.product-catalog {
-        width: 100%;
-        padding: 0;
-    }
-    body #container.product-catalog {
-        padding: 5px;
-    }
     .responsive.boxed #product_details_container {
         display: block;
     }

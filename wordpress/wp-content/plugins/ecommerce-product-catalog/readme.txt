@@ -214,6 +214,10 @@ This is not a store. It's main purpose is to present products or services on the
 
 Use [impleCode Translate Project](http://translate.implecode.com/projects/ecommerce-product-catalog/#cam=wordpress-org-changelog&key=epc-translate "eCommerce Product Catalog Translation Project") to add new or fix the existing translations. 
 
+= 2.5.15 - 07/06/2016 =
+
+* Tweak - code improvements for even better performance
+
 = 2.5.14 - 30/05/2016 =
 
 * Tweak - autocomplete on product attributes

@@ -144,7 +144,7 @@ function product_attributes_number() {
  * @param int $i
  * @return string
  */
-function get_default_product_attribute_label( $i ) {
+function get_default_product_attribute_label( $i = null ) {
 	$attribute_label = get_option( 'product_attribute_label' );
 	if ( $i == null ) {
 		return $attribute_label;

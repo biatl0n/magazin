@@ -1,0 +1,20 @@
+06-26-2016 @ 01:45:52 - Queuing 2.6.0 - wc_update_260_options
+06-26-2016 @ 01:45:52 - Queuing 2.6.0 - wc_update_260_termmeta
+06-26-2016 @ 01:45:52 - Queuing 2.6.0 - wc_update_260_zones
+06-26-2016 @ 01:45:52 - Queuing 2.6.0 - wc_update_260_zone_methods
+06-26-2016 @ 01:45:52 - Queuing 2.6.0 - wc_update_260_refunds
+06-26-2016 @ 01:45:52 - Queuing 2.6.0 - wc_update_260_db_version
+06-26-2016 @ 01:45:52 - Unable to dispatch WooCommerce updater: Could not resolve host: magazin.local
+06-26-2016 @ 01:50:35 - Running wc_update_260_options callback
+06-26-2016 @ 01:50:35 - Finished wc_update_260_options callback
+06-26-2016 @ 01:50:35 - Running wc_update_260_termmeta callback
+06-26-2016 @ 01:50:35 - Finished wc_update_260_termmeta callback
+06-26-2016 @ 01:50:35 - Running wc_update_260_zones callback
+06-26-2016 @ 01:50:35 - Finished wc_update_260_zones callback
+06-26-2016 @ 01:50:35 - Running wc_update_260_zone_methods callback
+06-26-2016 @ 01:50:35 - Finished wc_update_260_zone_methods callback
+06-26-2016 @ 01:50:35 - Running wc_update_260_refunds callback
+06-26-2016 @ 01:50:35 - Finished wc_update_260_refunds callback
+06-26-2016 @ 01:50:35 - Running wc_update_260_db_version callback
+06-26-2016 @ 01:50:35 - Finished wc_update_260_db_version callback
+06-26-2016 @ 01:50:35 - Data update complete

@@ -5,6 +5,17 @@
 
 @import url("../storefront/style.css");
 
+/*body {
+    min-width: 800px;
+    overflow-x: scroll;
+}*/
+
+/*___________________________________________________________________________________________________*/
+
+
+
+
+
 .cart-contents {
     padding-top: 10px!important;
     padding-bottom: 10px!important;
@@ -157,11 +168,9 @@ ul.dropdown li li {
 ul.dropdown li:hover ul {
     left: 0px;
     width: 100%;
-    /*background: #FFDD55;*/
-    background: #C8C5D9;
+    background: #FFDD55;
 }
 
 .menu-item:hover {
-    /*background: #FFEEAA;*/
-    background: #CEDECE;
+    background: #FFEEAA;
 }
