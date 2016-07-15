@@ -163,3 +163,89 @@ ul.dropdown li:hover ul {
 .menu-item:hover {
     background: #FFEEAA;
 }
+
+
+/*_________Style for banners_____________*/
+
+
+.lay {
+    min-width: 1024px;
+    width: auto;
+    max-width: 1440px;
+    padding-right: 130px;
+    padding-left: 130px;
+    margin: 0 auto;
+}
+
+.pops__wrapp {
+   /* border: 1px solid black; */
+}
+
+.pops__row {
+    position: relative;
+    margin: 0 0 13px;
+    padding-bottom: calc(364*(100%/1160));
+}
+
+.pops__row.pops__row_pos_1 .pops__item:nth-child(1) {
+    bottom: calc(50% - -8px);
+    left: 0;
+}
+
+.pops__row.pops__row_pos_1 .pops__item:nth-child(2) {
+    top: calc(50% - -3px);
+    bottom: 25%;
+    left: 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid transparent;
+}
+
+.pops__row.pops__row_pos_1 .pops__item:nth-child(3) {
+    top: calc(75% - -3px);
+    left: 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.pops__row.pops__row_pos_1 .pops__item:nth-child(4) {
+    left: 25%;
+}
+
+.pops__row.pops__row_pos_1 .pops__item:nth-child(5) {
+    left: 50%;
+    width: calc(50% - 13px);
+}
+
+.pops__item {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: calc(25% - 13px);
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.pops__item .image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    max-width: 105%;
+    max-height: 100%;
+    margin: auto;
+    transform: translatez(0);
+    -webkit-transform: translatez(0);
+    -moz-transform: translatez(0);
+    -ms-transform: translatez(0);
+    -o-transform: translatez(0);
+}
+
+.image {
+    font: 0/0 a;
+    border: 0;
+}
+
+
+
+/*_______________________________________*/

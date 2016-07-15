@@ -10,13 +10,10 @@
     <div class="pops__wrapp">
         <div class="pops__row pops__row_pos_1">
             <a class="pops__item" href="#">
-                <img class="image" src="woter.png" title=""></img>
+                <img class="image" src="ban_auto.png" title=""></img>
             </a>
             <a class="pops__item" href="#">
-                <img class="image" src="pump.png" title=""></img>
-            </a>
-            <a class="pops__item" href="#">
-                <img class="image" src="tv.png" title=""></img>
+                <img class="image" src="ban_auto.png" title=""></img>
             </a>
         </div>
     </div>
