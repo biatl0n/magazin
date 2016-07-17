@@ -453,12 +453,12 @@ if ( ! function_exists( 'generate_fonts_customize_register' ) ) :
 						'section'     => 'font_section',
 						'type'        => 'addon',
 						'label'			=> __( 'More Settings','generatepress' ),
-						'url' => 'http://www.generatepress.com/downloads/generate-typography/',
+						'url' => 'https://generatepress.com/downloads/generate-typography/',
 						'description' => sprintf(
 							__( 'Looking to add more typography settings?<br /> %s.', 'generatepress' ),
 							sprintf(
 								'<a href="%1$s" target="_blank">%2$s</a>',
-								esc_url( 'http://www.generatepress.com/downloads/generate-typography/' ),
+								esc_url( 'https://generatepress.com/downloads/generate-typography/' ),
 								__( 'Check out Generate Typography', 'generatepress' )
 							)
 						),

@@ -193,3 +193,75 @@ function generate_save_footer_widget_meta($post_id) {
 		delete_post_meta( $post_id, $key );
 }  
 add_action('save_post', 'generate_save_footer_widget_meta');
+
+/**
+ * Generate the page builder integration metabox
+ * @since 1.3.32
+ */
+function generate_add_page_builder_meta_box() {  
+
+	// Set user role - make filterable
+	$allowed = apply_filters( 'generate_metabox_capability', 'edit_theme_options' );
+	
+	// If not an administrator, don't show the metabox
+	if ( ! current_user_can( $allowed ) )
+		return;
+		
+	$post_types = get_post_types();
+	foreach ($post_types as $type) {
+		add_meta_box
+		(  
+			'generate_page_builder_meta_box', // $id  
+			__('Page Builder Integration','generatepress'), // $title   
+			'generate_show_page_builder_meta_box', // $callback  
+			$type, // $page  
+			'side', // $context  
+			'default' // $priority  
+		); 
+	}
+}  
+add_action('add_meta_boxes', 'generate_add_page_builder_meta_box');
+
+/**
+ * Outputs the content of the metabox
+ */
+function generate_show_page_builder_meta_box( $post ) {  
+
+    wp_nonce_field( basename( __FILE__ ), 'generate_page_builder_nonce' );
+    $stored_meta = get_post_meta( $post->ID );
+	$stored_meta['_generate-full-width-content'][0] = ( isset( $stored_meta['_generate-full-width-content'][0] ) ) ? $stored_meta['_generate-full-width-content'][0] : '';
+    ?>
+ 
+    <p>
+		<div class="generate_full_width_template">
+			<label for="_generate-full-width-content" style="display:block;margin-bottom:10px;">
+				<input type="checkbox" name="_generate-full-width-content" id="_generate-full-width-content" value="true" <?php checked( $stored_meta['_generate-full-width-content'][0], 'true' ); ?>>
+				<?php _e('Full Width Content','generatepress');?>
+			</label>
+		</div>
+	</p>
+ 
+    <?php
+}
+// Save the Data  
+function generate_save_page_builder_meta($post_id) {  
+    
+	// Checks save status
+    $is_autosave = wp_is_post_autosave( $post_id );
+    $is_revision = wp_is_post_revision( $post_id );
+    $is_valid_nonce = ( isset( $_POST[ 'generate_page_builder_nonce' ] ) && wp_verify_nonce( $_POST[ 'generate_page_builder_nonce' ], basename( __FILE__ ) ) ) ? true : false;
+ 
+    // Exits script depending on save status
+    if ( $is_autosave || $is_revision || ! $is_valid_nonce ) {
+        return;
+    }
+	
+	$key   = '_generate-full-width-content';
+	$value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
+
+	if ( $value )
+		update_post_meta( $post_id, $key, $value );
+	else
+		delete_post_meta( $post_id, $key );
+}  
+add_action('save_post', 'generate_save_page_builder_meta');

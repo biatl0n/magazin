@@ -246,21 +246,21 @@ if ( ! function_exists( 'generate_excerpt_more' ) ) :
 /**
  * Prints the read more HTML to post excerpts
  */
-	add_filter( 'excerpt_more', 'generate_excerpt_more' );
-	function generate_excerpt_more( $more ) {
-		return ' ... <a class="read-more" href="'. get_permalink( get_the_ID() ) . '">' . __('Read more', 'generatepress') . '</a>';
-	}
+add_filter( 'excerpt_more', 'generate_excerpt_more' );
+function generate_excerpt_more( $more ) {
+	return ' ... <a title="' . esc_attr( get_the_title() ) . '" class="read-more" href="'. get_permalink( get_the_ID() ) . '">' . __('Read more', 'generatepress') . '</a>';
+}
 endif;
 
 if ( ! function_exists( 'generate_content_more' ) ) :
 /**
  * Prints the read more HTML to post content using the more tag
  */
-	add_filter( 'the_content_more_link', 'generate_content_more' );
-	function generate_content_more( $more ) {
-		$more_jump = apply_filters( 'generate_more_jump','#more-' . get_the_ID() );
-		return '<p class="read-more-container"><a class="read-more content-read-more" href="'. get_permalink( get_the_ID() ) . $more_jump . '">' . __('Read more', 'generatepress') . '</a></p>';
-	}
+add_filter( 'the_content_more_link', 'generate_content_more' );
+function generate_content_more( $more ) {
+	$more_jump = apply_filters( 'generate_more_jump','#more-' . get_the_ID() );
+	return '<p class="read-more-container"><a title="' . esc_attr( get_the_title() ) . '" class="read-more content-read-more" href="'. esc_url( get_permalink( get_the_ID() ) . $more_jump ) . '">' . __('Read more', 'generatepress') . '</a></p>';
+}
 endif;
 
 if ( ! function_exists( 'generate_featured_page_header_area' ) ) :

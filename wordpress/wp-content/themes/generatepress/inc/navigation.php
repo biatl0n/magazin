@@ -204,7 +204,7 @@ function generate_nav_dropdown( $item_output, $item, $depth, $args )
 	// If we're working with the primary or secondary theme locations
 	if ( 'primary' == $args->theme_location || 'secondary' == $args->theme_location || 'slideout' == $args->theme_location ) {
 		// If a dropdown menu is detected
-		$dropdown = ( in_array( 'menu-item-has-children', $item->classes ) || in_array( 'page_item_has_children', $item->classes ) ) ? true : false;
+		$dropdown = ( in_array( 'menu-item-has-children', $item->classes ) ) ? true : false;
 		if ( $dropdown ) :
 			// Add our arrow icon
 			$item_output = str_replace( $args->link_after . '</a>', $args->link_after . '<span role="button" class="dropdown-menu-toggle" aria-expanded="false"></span></a>', $item_output );

@@ -201,6 +201,10 @@ if ( !function_exists('generate_spacing_css') ) :
 				'padding-right' => ( isset( $spacing_settings['menu_item'] ) ) ? $spacing_settings['menu_item'] . 'px' : null,
 			),
 			
+			'.main-navigation .main-nav ul li.menu-item-has-children > a' => array(
+				'padding-right' => ( is_rtl() ) ? $spacing_settings['menu_item'] . 'px' : null
+			)
+			
 		);
 		
 		// Output the above CSS
@@ -300,8 +304,9 @@ function generate_additional_spacing()
 		),
 		
 		'.menu-item-has-children .dropdown-menu-toggle' => array(
-			'padding-right' => ( isset( $spacing_settings['menu_item'] ) ) ? $spacing_settings['menu_item'] . 'px' : null,
-		),
+			'padding-right' => ( isset( $spacing_settings['menu_item'] ) && ! is_rtl() ) ? $spacing_settings['menu_item'] . 'px' : null,
+			'padding-left' => ( isset( $spacing_settings['menu_item'] ) && is_rtl() ) ? $spacing_settings['menu_item'] . 'px' : null,
+		)
 		
 	);
 	

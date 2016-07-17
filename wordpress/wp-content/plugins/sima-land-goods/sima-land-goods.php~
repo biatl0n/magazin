@@ -36,15 +36,8 @@ function register_my_custom_menu_page(){
 }
 
 function getCatigories(){
-    /*
-    $curl = curl_init('https://www.sima-land.ru/api/v3/item/?page=50');
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $json = curl_exec($curl); // сохранен json
-    curl_close($curl); 
-     */
     
-    $curl = curl_init('https://www.sima-land.ru/api/v3/item-search/153908/');
+    $curl = curl_init('https://www.sima-land.ru/api/v3/category/?level=2&path=16&is_not_empty=1');
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $json = curl_exec($curl);
@@ -52,13 +45,45 @@ function getCatigories(){
 
     echo "<pre>";
     $json=json_decode($json);
+    $json2=$json->items;
+    
+    foreach ($json2 as $key => $value) {
+        print_r ("$key => $value->name");
+        print_r ("   ID:$value->id, Path:$value->path\n");
 
-    print_r($json);
+            $curl = curl_init("https://www.sima-land.ru/api/v3/item/?category_id=$value->id&has_price=1");
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $json = curl_exec($curl);
+            curl_close($curl);
+            $jsonGood=json_decode($json);
+            $jsonGood2=$jsonGood->items;    
+            $PageCount=$jsonGood->_meta->pageCount;
+
+            $jsonGood3=array();
+            //for ($i=1; $i<=$PageCount; $i++){
+            for ($i=1; $i<=2; $i++){
+                $curl = curl_init("https://www.sima-land.ru/api/v3/item/?category_id=$value->id&has_price=1");
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                $json = curl_exec($curl);
+                curl_close($curl);
+                $jsonGood=json_decode($json);
+                $jsonGood2=$jsonGood->items;
+                $jsonGood3=array_merge($jsonGood3, $jsonGood2);
+            }
+            
+            foreach ($jsonGood3 as $key2 => $value2) {
+                print_r ("              $key2 => $value2->name");
+                print_r ("  Price: $value2->price\n");
+                //print_r ("$key2 => $value2->description\n");
+            }
+    }
+
 }
 
 
 function my_custom_menu_page(){
-    echo "Код страницы."; 
     getCatigories();
 }
 

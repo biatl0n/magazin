@@ -5,7 +5,7 @@
  * @package GeneratePress
  */
 	
-define( 'GENERATE_VERSION', '1.3.31');
+define( 'GENERATE_VERSION', '1.3.34');
 define( 'GENERATE_URI', get_template_directory_uri() );
 define( 'GENERATE_DIR', get_template_directory() );
 
@@ -70,11 +70,16 @@ function generate_setup()
 	 * Add Logo support
 	 */
 	add_theme_support( 'custom-logo', array(
-		'height' => false,
-		'width' => false,
+		'height' => 70,
+		'width' => 350,
 		'flex-height' => true,
 		'flex-width' => true,
 	) );
+	
+	/*
+	 * Indicate widget sidebars can use selective refresh in the Customizer.
+	 */
+	add_theme_support( 'customize-selective-refresh-widgets' );
 	
 	/**
 	 * Set the content width to something large
@@ -95,15 +100,15 @@ endif; // generate_setup
  * Set default options
  */
 function generate_get_defaults()
-{
+{	
 	$generate_defaults = array(
 		'hide_title' => '',
 		'hide_tagline' => '',
 		'logo' => '',
 		'container_width' => '1100',
 		'header_layout_setting' => 'fluid-header',
-		'nav_alignment_setting' => 'left',
-		'header_alignment_setting' => 'left',
+		'nav_alignment_setting' => ( is_rtl() ) ? 'right' : 'left',
+		'header_alignment_setting' => ( is_rtl() ) ? 'right' : 'left',
 		'nav_layout_setting' => 'fluid-nav',
 		'nav_position_setting' => 'nav-below-header',
 		'nav_dropdown_type' => 'hover',
@@ -228,8 +233,8 @@ function generate_scripts()
 	
 	// Enqueue our CSS.
 	wp_enqueue_style( 'generate-style-grid', get_template_directory_uri() . "/css/unsemantic-grid{$suffix}.css", false, GENERATE_VERSION, 'all' );
-	wp_enqueue_style( 'generate-style', get_template_directory_uri() . '/style.css', false, GENERATE_VERSION, 'all' );
-	wp_enqueue_style( 'generate-mobile-style', get_template_directory_uri() . "/css/mobile{$suffix}.css", false, GENERATE_VERSION, 'all' );
+	wp_enqueue_style( 'generate-style', get_template_directory_uri() . '/style.css', array( 'generate-style-grid' ), GENERATE_VERSION, 'all' );
+	wp_enqueue_style( 'generate-mobile-style', get_template_directory_uri() . "/css/mobile{$suffix}.css", array( 'generate-style' ), GENERATE_VERSION, 'all' );
 	wp_add_inline_style( 'generate-style', generate_base_css() );
 	
 	// Add the child theme CSS if child theme is active.
@@ -240,6 +245,10 @@ function generate_scripts()
 	$icon_essentials = apply_filters( 'generate_fontawesome_essentials', false );
 	$icon_essentials = ( $icon_essentials ) ? '-essentials' : false;
 	wp_enqueue_style( "fontawesome{$icon_essentials}", get_template_directory_uri() . "/css/font-awesome{$icon_essentials}{$suffix}.css", false, '4.6.3', 'all' );
+	
+	// IE 8
+	wp_enqueue_style( 'generate-ie', get_template_directory_uri() . "/css/ie{$suffix}.css", array( 'generate-style-grid' ), GENERATE_VERSION, 'all' );
+	wp_style_add_data( 'generate-ie', 'conditional', 'lt IE 9' );
 	
 	// Add jQuery
 	wp_enqueue_script( 'jquery' );
@@ -256,18 +265,24 @@ function generate_scripts()
 	
 	// Add our navigation search if it's enabled
 	if ( 'enable' == $generate_settings['nav_search'] ) {
-		wp_enqueue_script( 'generate-navigation-search', get_template_directory_uri() . "/js/navigation-search{$suffix}.js", array('jquery'), GENERATE_VERSION, true );
+		wp_enqueue_script( 'generate-navigation-search', get_template_directory_uri() . "/js/navigation-search{$suffix}.js", array( 'jquery' ), GENERATE_VERSION, true );
 	}
 	
 	// Add the back to top script if it's enabled
 	if ( 'enable' == $generate_settings['back_to_top'] ) {
-		wp_enqueue_script( 'generate-back-to-top', get_template_directory_uri() . "/js/back-to-top{$suffix}.js", array('jquery'), GENERATE_VERSION, true );
+		wp_enqueue_script( 'generate-back-to-top', get_template_directory_uri() . "/js/back-to-top{$suffix}.js", array( 'jquery' ), GENERATE_VERSION, true );
 	}
 	
 	// Move the navigation from below the content on mobile to below the header if it's in a sidebar
 	if ( 'nav-left-sidebar' == $generate_settings['nav_position_setting'] || 'nav-right-sidebar' == $generate_settings['nav_position_setting'] ) {
-		wp_enqueue_script( 'generate-move-navigation', get_template_directory_uri() . "/js/move-navigation{$suffix}.js", array('jquery'), GENERATE_VERSION, true );
+		wp_enqueue_script( 'generate-move-navigation', get_template_directory_uri() . "/js/move-navigation{$suffix}.js", array( 'jquery' ), GENERATE_VERSION, true );
 	}
+	
+	// IE 8
+	if ( function_exists( 'wp_script_add_data' ) ) :
+		wp_enqueue_script( 'generate-html5', get_template_directory_uri() . "/js/html5shiv{$suffix}.js", array( 'jquery' ), GENERATE_VERSION, true );
+		wp_script_add_data( 'generate-html5', 'conditional', 'lt IE 9' );
+	endif;
 	
 	// Add the threaded comments script
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
@@ -484,15 +499,18 @@ function generate_add_viewport()
 
 /** 
  * Add compatibility for IE8 and lower
+ * No need to run this if wp_script_add_data() exists
  * @since 1.1.9
  */
-add_action('wp_head','generate_ie_compatibility');
+add_action('wp_footer','generate_ie_compatibility');
 function generate_ie_compatibility()
 {
+	if ( function_exists( 'wp_script_add_data' ) )
+		return;
+	
 	$suffix = generate_get_min_suffix();
 	?>
 	<!--[if lt IE 9]>
-		<link rel="stylesheet" href="<?php echo get_template_directory_uri();?>/css/ie<?php echo $suffix;?>.css" />
 		<script src="<?php echo get_template_directory_uri();?>/js/html5shiv<?php echo $suffix;?>.js"></script>
 	<![endif]-->
 	<?php

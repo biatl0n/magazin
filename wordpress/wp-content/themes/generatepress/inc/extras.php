@@ -38,6 +38,10 @@ function generate_body_classes( $classes )
 	// Get the footer widgets
 	$widgets = generate_get_footer_widgets();
 	
+	// Full width content
+	$full_width = get_post_meta( get_the_ID(), '_generate-full-width-content', true );
+	$classes[] = ( '' !== $full_width && false !== $full_width && is_singular() ) ? 'full-width-content' : '';
+	
 	// Let us know if a featured image is being used
 	if ( has_post_thumbnail() ) :
 		$classes[] = 'featured-image-active';
@@ -149,6 +153,7 @@ function generate_left_sidebar_classes( $classes )
 	$classes[] = 'widget-area';
 	$classes[] = 'grid-' . $left_sidebar_width;
 	$classes[] = 'tablet-grid-' . $left_sidebar_tablet_width;
+	$classes[] = 'mobile-grid-100';
 	$classes[] = 'grid-parent';
 	$classes[] = 'sidebar';
 
@@ -191,6 +196,7 @@ function generate_content_classes( $classes )
 	
 	$classes[] = 'content-area';
 	$classes[] = 'grid-parent';
+	$classes[] = 'mobile-grid-100';
 
 	// Get the layout
 	$layout = generate_get_layout();
