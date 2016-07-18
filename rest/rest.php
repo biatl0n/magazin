@@ -1,0 +1,60 @@
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+use Automattic\WooCommerce\Client;
+$woocommerce = new Client(
+    'http://magazin.local/wordpress', 
+    'ck_f2cca014ecde9f7cbb00f42d5281efccc9ef8ff0', 
+    'cs_eb938aef96209397fa079268422a9cf782e5a383',
+    [
+        'wp_api' => true,
+        'version' => 'wc/v1',
+    ]
+);
+
+use Automattic\WooCommerce\HttpClient\HttpClientException;
+
+try {
+    //echo "<pre>";
+    //print_r($woocommerce->get('products/categories'));
+    //echo "</pre>";
+    
+    //_____________________________________________________________________________add_catigory
+    //$data = [
+    //    'name' => 'Одеждаааааааааааааааааааааааааааааааааааа',
+    //    'parent' => '12',
+    //    'display' => 'subcategories',
+    //    'image' => [
+    //        'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_2_front.jpg'
+    //    ]
+    //];
+    //print_r($woocommerce->post('products/categories', $data));
+
+    $parameters = array("page" => "1",);
+
+    $results = $woocommerce->get('products/categories', $parameters);
+    echo "<pre>";
+    print_r($results);
+
+    $lastRequest = $woocommerce->http->getRequest();
+    $lastRequest->getUrl(); // Requested URL (string).
+    $lastRequest->getMethod(); // Request method (string).
+    $lastRequest->getParameters(); // Request parameters (array).
+    $lastRequest->getHeaders(); // Request headers (array).
+    $lastRequest->getBody(); // Request body (JSON).
+
+    $lastResponse = $woocommerce->http->getResponse();
+    $lastResponse->getCode(); // Response code (int).
+    $lastResponse->getHeaders(); // Response headers (array).
+    $lastResponse->getBody(); // Response body (JSON).
+} 
+catch (HttpClientException $e) {
+    $e->getMessage();
+    $e->getRequest();
+    $e->getResponse();
+}
+
+echo "<pre>";
+print_r($e);
+
+?>
