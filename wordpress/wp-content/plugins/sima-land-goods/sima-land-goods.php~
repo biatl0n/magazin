@@ -64,16 +64,18 @@ function my_custom_menu_page(){
         echo "<input type='submit' value='Получить товары'>";
         echo "</form>";
     }
-    
     $subCatID=$_POST['subCatID'];
     $catID=$_POST['catID'];
     if ($subCatID!=NULL){
         $itemCatInfo=$simaLand->getItemCatInfo($catID);
         $simaLand->addCat('0', $itemCatInfo->name, $itemCatInfo->icon, "products");
-        //$itemCatInfo=$simaLand->getItemCatInfo($subCatID);
-        //$simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories");
+        $catID=$simaLand->magazinFindCat($itemCatInfo->name);
+        $itemCatInfo=$simaLand->getItemCatInfo($subCatID);
+        $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories");
+        $goodsArray=$simaLand->getGoods($itemCatInfo->id);
+        $catID=$simaLand->magazinFindCat($itemCatInfo->name);
+        $simaLand->addGood($goodsArray, $catID);
     }
-    echo $simaLand->magazinFindCat('asdf');
 }
 
 ?>

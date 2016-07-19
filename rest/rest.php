@@ -32,7 +32,8 @@ try {
 
     $parameters = array("page" => "3",);
 
-    $results = $woocommerce->get('products/categories', $parameters);
+    //$results = $woocommerce->get('products/categories', $parameters);
+    $results = $woocommerce->get('products');
     echo "<pre>";
     print_r($results);
 

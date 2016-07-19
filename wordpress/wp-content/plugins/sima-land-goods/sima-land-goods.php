@@ -64,7 +64,6 @@ function my_custom_menu_page(){
         echo "<input type='submit' value='Получить товары'>";
         echo "</form>";
     }
-    
     $subCatID=$_POST['subCatID'];
     $catID=$_POST['catID'];
     if ($subCatID!=NULL){
@@ -73,6 +72,10 @@ function my_custom_menu_page(){
         $catID=$simaLand->magazinFindCat($itemCatInfo->name);
         $itemCatInfo=$simaLand->getItemCatInfo($subCatID);
         $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories");
+        $goodsArray=$simaLand->getGoods($itemCatInfo->id);
+        print_r($itemCatInfo->id);
+        $catID=$simaLand->magazinFindCat($itemCatInfo->name);
+        $simaLand->addGood($goodsArray, $catID);
     }
 }
 

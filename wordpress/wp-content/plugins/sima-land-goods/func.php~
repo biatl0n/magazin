@@ -41,11 +41,10 @@ class SimaLandGoods {
 
     public function getGoods ($category_id){
         $PageCount=$this->getGoodsPageCount($category_id);
-
         $jsonGood3=array();
-        //for ($i=1; $i<=$PageCount;$i++)
-        for ($i=1; $i<=2; $i++){
-            $requestString = "$this->urlGoods?category_id=$category_id&has_price=1";
+        for ($i=1; $i<=$PageCount;$i++){
+        //for ($i=1; $i<=1; $i++)
+            $requestString = "$this->urlGoods?category_id=$category_id&has_balance=1&has_photo=0&is_disabled=0&has_price=1";
             $curl = curl_init($requestString);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -55,11 +54,7 @@ class SimaLandGoods {
             $jsonGood2=$jsonGood->items;
             $jsonGood3=array_merge($jsonGood3, $jsonGood2);
         }
-        foreach ($jsonGood3 as $key2 => $value2) {
-            print_r ("  $key2 => $value2->name");
-            print_r ("  Price: $value2->price\n");
-            //print_r ("$key2 => $value2->description\n");
-        }
+        return $jsonGood3;
     }
 
     public function magazinAuth($siteURL, $ck, $cs) {
@@ -84,7 +79,7 @@ class SimaLandGoods {
         $json=$woocommerce->get('products/categories');
         foreach ($json as $key => $value) {
             if($catName==$value['name']){
-               $result=true; 
+               $result=$value['id']; 
             }
         }
         return $result;
@@ -150,8 +145,33 @@ class SimaLandGoods {
             $e->getRequest();
             $e->getResponse();
         }
-        echo "<pre>";
-        print_r($e);
+    }
+
+    public function addGood($goodsArray, $catID){
+        $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
+        foreach ($goodsArray as $key => $value){
+            $data=[
+                'name' => "$value->name",
+                'slug' => "$value->slug",
+                'type'=>'simple',
+                'regular_price' => "$value->price",
+                'status'=>'publish',
+                'description'=>$value->description,
+                'images' => [
+                    ['src' => "$value->img",'position' => 0],
+                    ['src' => "$value->img",'position' => 1]
+                ],
+                'categories'=> [['id'=> $catID]]
+            ]; 
+            try {
+                $woocommerce->post('products', $data);
+            }
+            catch (HttpClientException $e) {
+                $e->getMessage();
+                $e->getRequest();
+                $e->getResponse();
+            }
+}
     }
 
     public function getParentCats(){
