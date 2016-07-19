@@ -28,6 +28,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 <?php
 require_once "func.php";
+require_once  __DIR__ . '/vendor/autoload.php';
+use Automattic\WooCommerce\Client;
+use Automattic\WooCommerce\HttpClient\HttpClientException;
 
 
 add_action( 'admin_menu', 'register_my_custom_menu_page' );
@@ -39,13 +42,38 @@ function register_my_custom_menu_page(){
  
 
 function my_custom_menu_page(){
-    //getCatigories();
-    echo "<pre>";
     $simaLand = new SimaLandGoods();
-    $simaLand->getCategories(2, 16);
-    //echo $simaLand->getGoodsPageCount(81);
     //$simaLand->getGoods(81);
-    $simaLand->magazinAuth(NULL, NULL, NULL);
+    require "html.php";
+    $parentCatsArray=$simaLand->getParentCats();
+    $parentCatsCount=count($parentCatsArray);
+    for ($i=0;$i<$parentCatsCount;$i++){
+        if ($parentCatsArray[$i]->name==$_POST['catName']) {
+            $catID=$parentCatsArray[$i]->id;
+            echo "Name=".$parentCatsArray[$i]->name." ID=".$catID."<br>";
+        }
+    }
+    if ($catID!=NULL){
+        echo "<form name='subCat' method='POST' action=".$_SERVER['REQUEST_URI'].">";
+        $subCatsArray=$simaLand->getCategories(2, $catID);
+        $subCatsCount=count($subCatsArray);
+        for ($i=0;$i<$subCatsCount;$i++){
+            echo "<input type='radio' name='subCatID' value='".$subCatsArray[$i]->id."'>".$subCatsArray[$i]->name."<br>";
+        }
+        echo "<input type='hidden' name='catID' value='$catID'>";
+        echo "<input type='submit' value='Получить товары'>";
+        echo "</form>";
+    }
+    
+    $subCatID=$_POST['subCatID'];
+    $catID=$_POST['catID'];
+    if ($subCatID!=NULL){
+        $itemCatInfo=$simaLand->getItemCatInfo($catID);
+        $simaLand->addCat('0', $itemCatInfo->name, $itemCatInfo->icon, "products");
+        $catID=$simaLand->magazinFindCat($itemCatInfo->name);
+        $itemCatInfo=$simaLand->getItemCatInfo($subCatID);
+        $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories");
+    }
 }
 
 ?>

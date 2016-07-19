@@ -1,6 +1,7 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 use Automattic\WooCommerce\Client;
+use Automattic\WooCommerce\HttpClient\HttpClientException;
 
 class SimaLandGoods {
     public $level;
@@ -9,24 +10,20 @@ class SimaLandGoods {
     public $is_not_empty=1;
     public $urlCategory="https://www.sima-land.ru/api/v3/category/";
     public $urlGoods="https://www.sima-land.ru/api/v3/item/";
+    public $woocommerce;
     //public $requestCategory = "https://www.sima-land.ru/api/v3/category/?level=2&path=16&is_not_empty=1";
     //public $requestGoods = "https://www.sima-land.ru/api/v3/item/?category_id=$value->id&has_price=1";
-    //
 
     public function getCategories($level, $path) {
-        $requestString = "$this->urlCategory?level=$level&path=$path&is_not_epmty=$this->is_not_empty";
+        $requestString = "$this->urlCategory?level=$level&path=$path&is_not_empty=$this->is_not_empty";
         $curl = curl_init($requestString);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $json = curl_exec($curl);
         curl_close($curl);
-
         $json=json_decode($json);
         $json=$json->items;
-        foreach ($json as $key => $value) {
-            print_r ("$key => $value->name");
-            print_r ("   ID:$value->id, Path:$value->path\n");
-        }   
+        return $json;
     }
 
     public function getGoodsPageCount ($category_id){
@@ -79,59 +76,108 @@ class SimaLandGoods {
                 'version' => 'wc/v1',
             ]
         );
-        $parameters = array("page" => "2", "per_page" => "50");
-        $results = $woocommerce->get('products/categories', $parameters);
+        return $woocommerce;
+    }
+
+    public function magazinFindCat ($catName){
+        $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
+        $json=$woocommerce->get('products/categories');
+        foreach ($json as $key => $value) {
+            if($catName==$value['name']){
+               $result=true; 
+            }
+        }
+        return $result;
+    }
+
+    public function addCat2(){
+
+        $woocommerce=$simaLand->magazinAuth(NULL, NULL, NULL);
+        $json=$simaLand->getCategories(2, 16); //Получаем список подкатегорий категории "спорт и отдых" магазина sima land
+        $catCount = count($json);
+    
+        for ($i=0; $i<=$catCount; $i++){
+            $parent=9;  //Подкатегория спорт и отдых в нашем магазине
+            $display="subcategories"; //Вид отображения как подкатегория в нашем магазине
+            $catName = $json[$i]->name."\n"; //название категории
+            $catSlug = $catName;
+            $catIcon = $json[$i]->icon."\n";
+    
+            $data = [
+                'name'=> "$catName",
+                'parent'=> "9",
+                'display'=> "$display",
+                'image'=> [
+                    'src'=> "$catIcon"
+                ]
+            ];
+            try {
+                $woocommerce->post('products/categories', $data);
+                $lastRequest = $woocommerce->http->getRequest();
+                $lastRequest->getUrl(); // Requested URL (string).
+                $lastRequest->getMethod(); // Request method (string).
+                $lastRequest->getParameters(); // Request parameters (array).
+                $lastRequest->getHeaders(); // Request headers (array).
+                $lastRequest->getBody(); // Request body (JSON).
+                $lastResponse = $woocommerce->http->getResponse();
+                $lastResponse->getCode(); // Response code (int).
+                $lastResponse->getHeaders(); // Response headers (array).
+                $lastResponse->getBody(); // Response body (JSON).
+            }
+            catch (HttpClientException $e) {
+                $e->getMessage();
+                $e->getRequest();
+                $e->getResponse();
+            }
+        }
+    }
+
+    public function addCat($idParentCat, $catName, $catIcon, $display){
+        $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
+        $data = [
+                'name'=> "$catName",
+                'parent'=> "$idParentCat",
+                'display'=> "$display",
+                'image'=> [
+                    'src'=> "$catIcon"
+                ]
+            ];
+        try {
+            $woocommerce->post('products/categories', $data);
+        }
+        catch (HttpClientException $e) {
+            $e->getMessage();
+            $e->getRequest();
+            $e->getResponse();
+        }
         echo "<pre>";
-        print_r($results);
+        print_r($e);
     }
-}
 
-/*
-function getCatigories(){
+    public function getParentCats(){
+        $requestString = "$this->urlCategory?level=1&is_not_empty=1";
+        $curl = curl_init($requestString);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $json = curl_exec($curl);
+        curl_close($curl);
+        $json=json_decode($json);
+        $json=$json->items;
+        return $json;
+    }
     
-    $curl = curl_init('https://www.sima-land.ru/api/v3/category/?level=2&path=16&is_not_empty=1');
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $json = curl_exec($curl);
-    curl_close($curl);
-
-    echo "<pre>";
-    $json=json_decode($json);
-    $json2=$json->items;
-    
-    foreach ($json2 as $key => $value) {
-        print_r ("$key => $value->name");
-        print_r ("   ID:$value->id, Path:$value->path\n");
-
-            $curl = curl_init("https://www.sima-land.ru/api/v3/item/?category_id=$value->id&has_price=1");
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            $json = curl_exec($curl);
-            curl_close($curl);
-            $jsonGood=json_decode($json);
-            $jsonGood2=$jsonGood->items;    
-            $PageCount=$jsonGood->_meta->pageCount;
-
-            $jsonGood3=array();
-            //for ($i=1; $i<=$PageCount; $i++){
-            for ($i=1; $i<=2; $i++){
-                $curl = curl_init("https://www.sima-land.ru/api/v3/item/?category_id=$value->id&has_price=1");
-                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                $json = curl_exec($curl);
-                curl_close($curl);
-                $jsonGood=json_decode($json);
-                $jsonGood2=$jsonGood->items;
-                $jsonGood3=array_merge($jsonGood3, $jsonGood2);
-            }
-            
-            foreach ($jsonGood3 as $key2 => $value2) {
-                print_r ("              $key2 => $value2->name");
-                print_r ("  Price: $value2->price\n");
-                //print_r ("$key2 => $value2->description\n");
-            }
+    public function getItemCatInfo($catID){
+        $requestString = "$this->urlCategory$catID/";
+        $curl = curl_init($requestString);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $json = curl_exec($curl);
+        curl_close($curl);
+        $json=json_decode($json);
+        return $json;
     }
 
 }
- */
+
+
 ?>

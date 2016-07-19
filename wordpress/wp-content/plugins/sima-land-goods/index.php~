@@ -1,0 +1,3 @@
+
+    <input type="text" name="catName" size="40">
+    <input type="submit" value="Получить список">

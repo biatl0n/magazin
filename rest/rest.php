@@ -30,7 +30,7 @@ try {
     //];
     //print_r($woocommerce->post('products/categories', $data));
 
-    $parameters = array("page" => "1",);
+    $parameters = array("page" => "3",);
 
     $results = $woocommerce->get('products/categories', $parameters);
     echo "<pre>";
