@@ -44,7 +44,7 @@ class SimaLandGoods {
         $jsonGood3=array();
         for ($i=1; $i<=$PageCount;$i++){
         //for ($i=1; $i<=1; $i++)
-            $requestString = "$this->urlGoods?category_id=$category_id&has_balance=1&has_photo=0&is_disabled=0&has_price=1";
+            $requestString = "$this->urlGoods?category_id=$category_id&has_balance=1&has_photo=0&is_disabled=0&has_price=1&expand=photos,photo_sizes&page=$i";
             $curl = curl_init($requestString);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -77,7 +77,18 @@ class SimaLandGoods {
     public function magazinFindCat ($catName){
         $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
         $json=$woocommerce->get('products/categories');
-        foreach ($json as $key => $value) {
+        $lastResponse = $woocommerce->http->getResponse();
+        $arr=$lastResponse->getHeaders();
+        $pageCount=$arr['X-WP-TotalPages'];
+        
+        $jsonMerge=array();
+        for ($i=1; $i<=$pageCount; $i++) {
+            $parameters = array("page" => "$i",);
+            $json=$woocommerce->get('products/categories', $parameters);
+            $jsonMerge=array_merge($jsonMerge, $json);
+        }
+
+        foreach ($jsonMerge as $key => $value) {
             if($catName==$value['name']){
                $result=$value['id']; 
             }
@@ -148,7 +159,7 @@ class SimaLandGoods {
     }
 
     public function addGood($goodsArray, $catID){
-        $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
+        $woocommerce=$this->magazinAuth(NULL, NULL, NULL); 
         foreach ($goodsArray as $key => $value){
             $data=[
                 'name' => "$value->name",
@@ -157,12 +168,14 @@ class SimaLandGoods {
                 'regular_price' => "$value->price",
                 'status'=>'publish',
                 'description'=>$value->description,
-                'images' => [
-                    ['src' => "$value->img",'position' => 0],
-                    ['src' => "$value->img",'position' => 1]
-                ],
+                'images' => [[]],
                 'categories'=> [['id'=> $catID]]
             ]; 
+            $photoCount=count($value->photos);
+            for ($i=0;$i<$photoCount;$i++){
+                $photoAddr = $value->photos[$i]->url_part."400.jpg";
+                array_push($data['images'],array("src"=>"$photoAddr", "position"=>$i, "name"=>"400"));
+            }
             try {
                 $woocommerce->post('products', $data);
             }
