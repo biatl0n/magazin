@@ -36,7 +36,7 @@ use Automattic\WooCommerce\HttpClient\HttpClientException;
 add_action( 'admin_menu', 'register_my_custom_menu_page' );
 function register_my_custom_menu_page(){
     add_menu_page( 
-        'custom menu title', 'sima-land-goods', 'manage_options', 'custompage', 'my_custom_menu_page', plugins_url( 'sima-land-goods/icon.png' ), 6  
+        'Sima-Land API client', 'Sima-Land API client', 'manage_options', 'custompage', 'my_custom_menu_page', plugins_url( 'sima-land-goods/icon.png' ), 6  
     ); 
 }
  
@@ -68,10 +68,18 @@ function my_custom_menu_page(){
     $catID=$_POST['catID'];
     if ($subCatID!=NULL){
         $itemCatInfo=$simaLand->getItemCatInfo($catID);
-        $simaLand->addCat('0', $itemCatInfo->name, $itemCatInfo->icon, "products");
+
+        $SlugCat = $itemCatInfo->full_slug;
+
+        $simaLand->addCat('0', $itemCatInfo->name, $itemCatInfo->icon, "products", $SlugCat);
         $catID=$simaLand->magazinFindCat($itemCatInfo->name);
         $itemCatInfo=$simaLand->getItemCatInfo($subCatID);
-        $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories");
+
+        $Slug=$itemCatInfo->full_slug;
+        $SlugLen=strlen($SlugCat)+1;
+        $Slug=substr($Slug, $SlugLen);
+        
+        $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories", $Slug);
         $goodsArray=$simaLand->getGoods($itemCatInfo->id);
         print_r($itemCatInfo->id);
         $catID=$simaLand->magazinFindCat($itemCatInfo->name);

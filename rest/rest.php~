@@ -15,6 +15,7 @@ $woocommerce = new Client(
 );
 
 
+/*
 //$ch = curl_init('https://www.sima-land.ru/api/v3/cart/');
 $ch = curl_init('https://www.sima-land.ru/api/v3/item/775644/?expand=photos');
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
@@ -40,14 +41,14 @@ curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 curl_setopt($ch, CURLOPT_USERPWD, "evgenybiatl0n@mail.ru:1989931323");
 $out = curl_exec($ch); 
 
-$image_sv = '/name.jpg';  
+$image_sv = 'name.jpg';  
 $img_sc = file_put_contents($image_sv, $out);  
 
 curl_close($ch);
 
+ */
 
-
-//try {
+try {
     //echo "<pre>";
     //print_r($woocommerce->get('products/categories'));
     //echo "</pre>";
@@ -63,11 +64,11 @@ curl_close($ch);
     //];
     //print_r($woocommerce->post('products/categories', $data));
     
-    /*
+    
     $parameters = array("page" => "3",);
 
     //$results = $woocommerce->get('products/categories', $parameters);
-    $results = $woocommerce->get('products');
+    $results = $woocommerce->get('products/categories');
     echo "<pre>";
     print_r($results);
 
@@ -90,7 +91,7 @@ catch (HttpClientException $e) {
 }
 
 echo "<pre>";
-print_r($e);*/
+print_r($e);
 
 
 

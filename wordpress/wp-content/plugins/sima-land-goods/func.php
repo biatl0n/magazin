@@ -44,7 +44,7 @@ class SimaLandGoods {
         $jsonGood3=array();
         for ($i=1; $i<=$PageCount;$i++){
         //for ($i=1; $i<=1; $i++)
-            $requestString = "$this->urlGoods?category_id=$category_id&has_balance=1&has_photo=0&is_disabled=0&has_price=1&expand=photos,photo_sizes&page=$i";
+            $requestString = "$this->urlGoods?category_id=$category_id&has_balance=1&has_photo=1&is_disabled=0&has_price=1&expand=photos,photo_sizes&page=$i";
             $curl = curl_init($requestString);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -97,7 +97,7 @@ class SimaLandGoods {
     }
 
     public function addCat2(){
-
+        /*
         $woocommerce=$simaLand->magazinAuth(NULL, NULL, NULL);
         $json=$simaLand->getCategories(2, 16); //Получаем список подкатегорий категории "спорт и отдых" магазина sima land
         $catCount = count($json);
@@ -135,19 +135,20 @@ class SimaLandGoods {
                 $e->getRequest();
                 $e->getResponse();
             }
-        }
+        }*/
     }
 
-    public function addCat($idParentCat, $catName, $catIcon, $display){
+    public function addCat($idParentCat, $catName, $catIcon, $display, $slug){
         $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
         $data = [
-                'name'=> "$catName",
-                'parent'=> "$idParentCat",
-                'display'=> "$display",
-                'image'=> [
-                    'src'=> "$catIcon"
-                ]
-            ];
+            'slug'=>"$slug",
+            'name'=> "$catName",
+            'parent'=> "$idParentCat",
+            'display'=> "$display",
+            'image'=> [
+                'src'=> "$catIcon"
+            ]
+        ];
         try {
             $woocommerce->post('products/categories', $data);
         }
@@ -169,13 +170,16 @@ class SimaLandGoods {
                 'status'=>'publish',
                 'description'=>$value->description,
                 'images' => [[]],
-                'categories'=> [['id'=> $catID]]
+                'categories'=> [['id'=> $catID]],
+                'sku'=>"$value->sid",
+                //'weight'=>"$value->weight"
             ]; 
             $photoCount=count($value->photos);
             for ($i=0;$i<$photoCount;$i++){
                 $photoAddr = $value->photos[$i]->url_part."400.jpg";
                 array_push($data['images'],array("src"=>"$photoAddr", "position"=>$i, "name"=>"400"));
             }
+            echo "<br>$value->name цена: $value->price Артикул: $value->sid Вес: $value->weight<br>";
             try {
                 $woocommerce->post('products', $data);
             }
