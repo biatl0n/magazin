@@ -68,7 +68,7 @@ try {
     $parameters = array("page" => "3",);
 
     //$results = $woocommerce->get('products/categories', $parameters);
-    $results = $woocommerce->get('products');
+    $results = $woocommerce->get('products/15662');
     echo "<pre>";
     print_r($results);
 

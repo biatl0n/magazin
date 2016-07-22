@@ -96,48 +96,6 @@ class SimaLandGoods {
         return $result;
     }
 
-    public function addCat2(){
-        /*
-        $woocommerce=$simaLand->magazinAuth(NULL, NULL, NULL);
-        $json=$simaLand->getCategories(2, 16); //Получаем список подкатегорий категории "спорт и отдых" магазина sima land
-        $catCount = count($json);
-    
-        for ($i=0; $i<=$catCount; $i++){
-            $parent=9;  //Подкатегория спорт и отдых в нашем магазине
-            $display="subcategories"; //Вид отображения как подкатегория в нашем магазине
-            $catName = $json[$i]->name."\n"; //название категории
-            $catSlug = $catName;
-            $catIcon = $json[$i]->icon."\n";
-    
-            $data = [
-                'name'=> "$catName",
-                'parent'=> "9",
-                'display'=> "$display",
-                'image'=> [
-                    'src'=> "$catIcon"
-                ]
-            ];
-            try {
-                $woocommerce->post('products/categories', $data);
-                $lastRequest = $woocommerce->http->getRequest();
-                $lastRequest->getUrl(); // Requested URL (string).
-                $lastRequest->getMethod(); // Request method (string).
-                $lastRequest->getParameters(); // Request parameters (array).
-                $lastRequest->getHeaders(); // Request headers (array).
-                $lastRequest->getBody(); // Request body (JSON).
-                $lastResponse = $woocommerce->http->getResponse();
-                $lastResponse->getCode(); // Response code (int).
-                $lastResponse->getHeaders(); // Response headers (array).
-                $lastResponse->getBody(); // Response body (JSON).
-            }
-            catch (HttpClientException $e) {
-                $e->getMessage();
-                $e->getRequest();
-                $e->getResponse();
-            }
-        }*/
-    }
-
     public function addCat($idParentCat, $catName, $catIcon, $display, $slug){
         $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
         $data = [
@@ -188,7 +146,7 @@ class SimaLandGoods {
                 $e->getRequest();
                 $e->getResponse();
             }
-}
+        }
     }
 
     public function getParentCats(){

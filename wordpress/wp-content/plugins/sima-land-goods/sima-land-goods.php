@@ -68,23 +68,48 @@ function my_custom_menu_page(){
     $catID=$_POST['catID'];
     if ($subCatID!=NULL){
         $itemCatInfo=$simaLand->getItemCatInfo($catID);
-
         $SlugCat = $itemCatInfo->full_slug;
-
         $simaLand->addCat('0', $itemCatInfo->name, $itemCatInfo->icon, "products", $SlugCat);
         $catID=$simaLand->magazinFindCat($itemCatInfo->name);
         $itemCatInfo=$simaLand->getItemCatInfo($subCatID);
-
         $Slug=$itemCatInfo->full_slug;
         $SlugLen=strlen($SlugCat)+1;
-        $Slug=substr($Slug, $SlugLen);
+        $Slug2=substr($Slug, $SlugLen);
+        $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories", $Slug2);
+
+        $is_leaf=$itemCatInfo->is_leaf;
+
+        if ($is_leaf!="1"){
+            $path=$itemCatInfo->path;
+            $Slug="$SlugCat/$Slug2/";
+            $SlugLen=strlen($Slug);
+            $catID=$simaLand->magazinFindCat($itemCatInfo->name);
+            $subCatsArray=$simaLand->getCategories(3, $path);
+            $subCatsCount=count($subCatsArray);
+            for($i=0;$i<$subCatsCount;$i++){
+                $subCatID=$subCatsArray[$i]->id;
+                $itemCatInfo=$simaLand->getItemCatInfo($subCatID);
+                $Slug3=$itemCatInfo->full_slug;
+                $Slug3=substr($Slug3, $SlugLen);
+                $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories", $Slug3);
+                $goodsArray=$simaLand->getGoods($itemCatInfo->id);
+                $MagCatID=$simaLand->magazinFindCat($itemCatInfo->name);
+                $simaLand->addGood($goodsArray, $MagCatID);
+            }
+        }
+
         
-        $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories", $Slug);
-        $goodsArray=$simaLand->getGoods($itemCatInfo->id);
-        print_r($itemCatInfo->id);
-        $catID=$simaLand->magazinFindCat($itemCatInfo->name);
+        if ($is_leaf=="1"){
+            $goodsArray=$simaLand->getGoods($itemCatInfo->id);
+            $catID=$simaLand->magazinFindCat($itemCatInfo->name);
+            $simaLand->addGood($goodsArray, $catID); 
+        }
+        
+        echo "ID категории: ".$itemCatInfo->id."<br>";
+        //$goodsArray=$simaLand->getGoods($itemCatInfo->id);
+        //$catID=$simaLand->magazinFindCat($itemCatInfo->name);
         //echo "<br>itemCatInfo:".$itemCatInfo->name." catID=".$catID;
-        $simaLand->addGood($goodsArray, $catID);
+        //$simaLand->addGood($goodsArray, $catID); 
     }
 }
 
