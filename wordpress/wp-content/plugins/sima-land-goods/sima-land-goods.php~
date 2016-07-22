@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: sima-land-goods
+Plugin Name: sima-land-api-client
 Plugin URI: http://justlinux.ru
-Description: Плагин работает с REST API сайта sima-land и импортирует оттуда товары
+Description: Плагин работает с REST API сайта sima-land.ru и импортирует оттуда товары
 Version: 1.0
 Author: Евгений Biatl0n Ашурков
 Author URI: http://justlinux.ru
@@ -36,36 +36,44 @@ use Automattic\WooCommerce\HttpClient\HttpClientException;
 add_action( 'admin_menu', 'register_my_custom_menu_page' );
 function register_my_custom_menu_page(){
     add_menu_page( 
-        'Sima-Land API client', 'Sima-Land API client', 'manage_options', 'custompage', 'my_custom_menu_page', plugins_url( 'sima-land-goods/icon.png' ), 6  
+        //'Sima-Land API client', 'Sima-Land API client', 'manage_options', 'custompage', 'my_custom_menu_page', plugins_url( 'sima-land-api-client/icon.png' ), 6  
+
+        'Sima-Land API client', 'Sima-Land API client', 'manage_options', 'Sima-Land-API-client', 'my_custom_menu_page', 'dashicons-download', 6  
+        
     ); 
 }
  
 
 function my_custom_menu_page(){
     $simaLand = new SimaLandGoods();
-    //$simaLand->getGoods(81);
     require "html.php";
     $parentCatsArray=$simaLand->getParentCats();
     $parentCatsCount=count($parentCatsArray);
+
     for ($i=0;$i<$parentCatsCount;$i++){
         if ($parentCatsArray[$i]->name==$_POST['catName']) {
             $catID=$parentCatsArray[$i]->id;
             echo "Name=".$parentCatsArray[$i]->name." ID=".$catID."<br>";
         }
     }
+
     if ($catID!=NULL){
         echo "<form name='subCat' method='POST' action=".$_SERVER['REQUEST_URI'].">";
         $subCatsArray=$simaLand->getCategories(2, $catID);
         $subCatsCount=count($subCatsArray);
+
         for ($i=0;$i<$subCatsCount;$i++){
             echo "<input type='radio' name='subCatID' value='".$subCatsArray[$i]->id."'>".$subCatsArray[$i]->name."<br>";
         }
+
         echo "<input type='hidden' name='catID' value='$catID'>";
         echo "<input type='submit' value='Получить товары'>";
         echo "</form>";
     }
+
     $subCatID=$_POST['subCatID'];
     $catID=$_POST['catID'];
+
     if ($subCatID!=NULL){
         $itemCatInfo=$simaLand->getItemCatInfo($catID);
         $SlugCat = $itemCatInfo->full_slug;
@@ -76,7 +84,6 @@ function my_custom_menu_page(){
         $SlugLen=strlen($SlugCat)+1;
         $Slug2=substr($Slug, $SlugLen);
         $simaLand->addCat($catID, $itemCatInfo->name, $itemCatInfo->icon, "subcategories", $Slug2);
-
         $is_leaf=$itemCatInfo->is_leaf;
 
         if ($is_leaf!="1"){
@@ -97,19 +104,12 @@ function my_custom_menu_page(){
                 $simaLand->addGood($goodsArray, $MagCatID);
             }
         }
-
         
         if ($is_leaf=="1"){
             $goodsArray=$simaLand->getGoods($itemCatInfo->id);
             $catID=$simaLand->magazinFindCat($itemCatInfo->name);
-            //$simaLand->addGood($goodsArray, $catID); 
+            $simaLand->addGood($goodsArray, $catID); 
         }
-        
-        echo "ID категории: ".$itemCatInfo->id."<br>";
-        //$goodsArray=$simaLand->getGoods($itemCatInfo->id);
-        //$catID=$simaLand->magazinFindCat($itemCatInfo->name);
-        //echo "<br>itemCatInfo:".$itemCatInfo->name." catID=".$catID;
-        //$simaLand->addGood($goodsArray, $catID); 
     }
 }
 
