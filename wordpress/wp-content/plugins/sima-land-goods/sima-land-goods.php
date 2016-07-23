@@ -27,35 +27,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ?>
 
 <?php
-require_once "func.php";
+require_once __DIR__."/func.php";
 require_once  __DIR__ . '/vendor/autoload.php';
 use Automattic\WooCommerce\Client;
 use Automattic\WooCommerce\HttpClient\HttpClientException;
-
+ignore_user_abort(true);
+set_time_limit(0);
 
 add_action( 'admin_menu', 'register_my_custom_menu_page' );
 function register_my_custom_menu_page(){
     add_menu_page( 
-        'Sima-Land API client', 'Sima-Land API client', 'manage_options', 'custompage', 'my_custom_menu_page', plugins_url( 'sima-land-api-client/icon.png' ), 6  
-
-        //'Sima-Land API client', 'Sima-Land API client', 'manage_options', 'Sima-Land-API-client', 'my_custom_menu_page', 'dashicons-download', 6  
-        
+        'Sima-Land API client', 'Sima-Land API client', 'manage_options', 'sima-land-api-client', 'my_custom_menu_page', 'dashicons-download', 6  
     ); 
 }
  
 
 function my_custom_menu_page(){
     $simaLand = new SimaLandGoods();
-    require "html.php";
     $parentCatsArray=$simaLand->getParentCats();
     $parentCatsCount=count($parentCatsArray);
+    require "html.php";
 
-    for ($i=0;$i<$parentCatsCount;$i++){
-        if ($parentCatsArray[$i]->name==$_POST['catName']) {
-            $catID=$parentCatsArray[$i]->id;
-            echo "Name=".$parentCatsArray[$i]->name." ID=".$catID."<br>";
-        }
-    }
+    $catID=$_POST['catName'];
 
     if ($catID!=NULL){
         echo "<form name='subCat' method='POST' action=".$_SERVER['REQUEST_URI'].">";
@@ -93,6 +86,7 @@ function my_custom_menu_page(){
             $catID=$simaLand->magazinFindCat($itemCatInfo->name);
             $subCatsArray=$simaLand->getCategories(3, $path);
             $subCatsCount=count($subCatsArray);
+
             for($i=0;$i<$subCatsCount;$i++){
                 $subCatID=$subCatsArray[$i]->id;
                 $itemCatInfo=$simaLand->getItemCatInfo($subCatID);
@@ -104,7 +98,7 @@ function my_custom_menu_page(){
                 $simaLand->addGood($goodsArray, $MagCatID);
             }
         }
-        
+
         if ($is_leaf=="1"){
             $goodsArray=$simaLand->getGoods($itemCatInfo->id);
             $catID=$simaLand->magazinFindCat($itemCatInfo->name);
