@@ -4,6 +4,9 @@ use Automattic\WooCommerce\Client;
 use Automattic\WooCommerce\HttpClient\HttpClientException;
 
 class SimaLandGoods {
+    public $siteURL;
+    public $ck;
+    public $cs;
     public $level;
     public $path;
     public $has_price=1;
@@ -11,8 +14,15 @@ class SimaLandGoods {
     public $urlCategory="https://www.sima-land.ru/api/v3/category/";
     public $urlGoods="https://www.sima-land.ru/api/v3/item/";
     public $woocommerce;
-    //public $requestCategory = "https://www.sima-land.ru/api/v3/category/?level=2&path=16&is_not_empty=1";
-    //public $requestGoods = "https://www.sima-land.ru/api/v3/item/?category_id=$value->id&has_price=1";
+
+    public function __construct(){
+        $file=__DIR__."/options.ini";
+        $current = file_get_contents($file);
+        $current = json_decode($current);
+        $this->ck=$current->userKey;
+        $this->cs=$current->secretKey;
+        $this->siteURL=$current->siteURL;
+    }
 
     public function getCategories($level, $path) {
         $requestString = "$this->urlCategory?level=$level&path=$path&is_not_empty=$this->is_not_empty";
@@ -57,20 +67,11 @@ class SimaLandGoods {
         return $jsonGood3;
     }
 
-    public function magazinAuth($siteURL, $ck, $cs) {
-        if ($siteURL==NULL) $siteURL="http://magazin.local/wordpress"; 
-        if ($ck==NULL) $ck="ck_f2cca014ecde9f7cbb00f42d5281efccc9ef8ff0";
-        if ($cs==NULL) $cs="cs_eb938aef96209397fa079268422a9cf782e5a383";
-
-            $woocommerce = new Client(
-            $siteURL, 
-            $ck, 
-            $cs,
-            [
-                'wp_api' => true,
-                'version' => 'wc/v1',
-            ]
-        );
+    public function magazinAuth(/*$siteURL, $ck, $cs*/) {
+        $siteURL = $this->siteURL;
+        $ck = $this->ck;
+        $cs = $this->cs;
+        $woocommerce = new Client($siteURL, $ck, $cs, ['wp_api' => true,'version' => 'wc/v1',]);
         return $woocommerce;
     }
 
@@ -96,6 +97,28 @@ class SimaLandGoods {
         return $result;
     }
 
+    public function magazinFindProduct ($productName, $catID){
+        $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
+        $parameters = array("category" => "$catID");
+        $json=$woocommerce->get('products', $parameters);
+        $lastResponse = $woocommerce->http->getResponse();
+        $arr=$lastResponse->getHeaders();
+        $pageCount=$arr['X-WP-TotalPages'];
+
+        $jsonMerge=array();
+        for ($i=1; $i<=$pageCount; $i++) {
+            $parameters = array("page" => "$i", "category" => "$catID");
+            $json=$woocommerce->get('products', $parameters);
+            $jsonMerge=array_merge($jsonMerge, $json);
+        }
+        foreach ($jsonMerge as $key => $value) {
+            if($productName==$value['name']){
+                $result=$value['id']; 
+            }
+        }
+        return $result;
+    }   
+
     public function addCat($idParentCat, $catName, $catIcon, $display, $slug){
         $woocommerce=$this->magazinAuth(NULL, NULL, NULL);
         $data = [
@@ -119,6 +142,7 @@ class SimaLandGoods {
 
     public function addGood($goodsArray, $catID){
         $woocommerce=$this->magazinAuth(NULL, NULL, NULL); 
+        $iter=1;
         foreach ($goodsArray as $key => $value){
             $data=[
                 'name' => "$value->name",
@@ -137,15 +161,35 @@ class SimaLandGoods {
                 $photoAddr = $value->photos[$i]->url_part."400.jpg";
                 array_push($data['images'],array("src"=>"$photoAddr", "position"=>$i, "name"=>"400"));
             }
-            echo "<br>$value->name цена: $value->price Артикул: $value->sid Вес: $value->weight<br>";
+            echo "<br>$iter: $value->name цена: $value->price Артикул: $value->sid <br>";
+            print str_repeat(' ', 5000);
+            ob_flush();
+            flush();
+
             try {
                 $woocommerce->post('products', $data);
-            }
+                            }
             catch (HttpClientException $e) {
                 $e->getMessage();
                 $e->getRequest();
                 $e->getResponse();
             }
+            if ($e){
+                $message=$e->getResponse();
+                $code=$message->getCode();
+            }
+            if ($code="400"){
+                try {
+                    $productID=$this->magazinFindProduct($value->name, $catID);
+                    $woocommerce->put("products/$productID", $data);
+                }
+                catch (HttpClientException $e) {
+                    $e->getMessage();
+                    $e->getRequest();
+                    $e->getResponse();
+                }
+            }
+            $iter++;
         }
     }
 
